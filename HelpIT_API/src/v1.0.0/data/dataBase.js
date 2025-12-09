@@ -10,11 +10,11 @@ const getAllObjects = () => {
 }
 
 // add case
-const addObject = (cases) => {
+const addObject = (caseObject) => {
     const id = cases.length ? cases[cases.length - 1].id + 1 : 1;
-    const newCase = { id, ...cases };
-    cases.push(newCase);
-    return newCase;
+    const newCaseObject = { id, ...caseObject };
+    cases.push(newCaseObject);
+    return newCaseObject;
 }
 
 // update case by id

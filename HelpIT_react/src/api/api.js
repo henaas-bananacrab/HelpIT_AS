@@ -1,7 +1,7 @@
-const API_BASE_URL = 'http://localhost:3002/api';
+const API_BASE_URL = 'http://localhost:3002/api/v1/cases';
 
-export const getCases = async (version) => {
-    const res = await fetch(`${API_BASE_URL}/cases`);
+export const getCases = async () => {
+    const res = await fetch(`${API_BASE_URL}`);
     if (!res.ok) {
         throw new Error('Network response was not ok');
     }
@@ -10,8 +10,8 @@ export const getCases = async (version) => {
     return data;
 }
 
-export const createCase = async (version, caseData) => {
-    const res = await fetch(`${API_BASE_URL}/cases`, {
+export const createCase = async (caseData) => {
+    const res = await fetch(API_BASE_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export const createCase = async (version, caseData) => {
     return data;
 }
 
-export const updateCase = async (version, caseId, caseData) => {
-    const res = await fetch(`${API_BASE_URL}/cases/${caseId}`, {
+export const updateCase = async (id, caseData) => {
+    const res = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -42,8 +42,8 @@ export const updateCase = async (version, caseId, caseData) => {
     return data;
 }
 
-export const deleteCase = async (version, caseId) => {
-    const res = await fetch(`${API_BASE_URL}/cases/${caseId}`, {
+export const deleteCase = async (id) => {
+    const res = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'DELETE',
     });
     if (!res.ok) {

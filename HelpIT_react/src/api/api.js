@@ -1,21 +1,55 @@
-import axios from 'axios';
+const API_BASE_URL = 'http://localhost:3002/api';
 
 export const getCases = async (version) => {
-    const response = await axios.get(`http://localhost:3002/api/${version}/cases`);
-    return response.data;
+    const res = await fetch(`${API_BASE_URL}/cases`);
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+
+    return data;
 }
 
 export const createCase = async (version, caseData) => {
-    const response = await axios.post(`http://localhost:3002/api/${version}/cases`, caseData);
-    return response.data;
+    const res = await fetch(`${API_BASE_URL}/cases`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(caseData),
+    });
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+
+    return data;
 }
 
 export const updateCase = async (version, caseId, caseData) => {
-    const response = await axios.put(`http://localhost:3002/api/${version}/cases/${caseId}`, caseData);
-    return response.data;
+    const res = await fetch(`${API_BASE_URL}/cases/${caseId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(caseData),
+    });
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+
+    return data;
 }
 
 export const deleteCase = async (version, caseId) => {
-    const response = await axios.delete(`http://localhost:3002/api/${version}/cases/${caseId}`);
-    return response.data;
+    const res = await fetch(`${API_BASE_URL}/cases/${caseId}`, {
+        method: 'DELETE',
+    });
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+
+    return data;
 }

@@ -8,7 +8,9 @@ const cors = require('cors');
 
 //Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // React app origin
+}));
 
 //Setup Routes | www.localhost:3002/api/cases
 app.use('/api', apiVersionMiddleware);

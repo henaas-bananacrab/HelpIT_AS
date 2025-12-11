@@ -1,13 +1,8 @@
-import { useState } from 'react'
-import './App.css'
+import PageV1 from './components/v1.jsx';
+import './App.css';
 
-function App() {
-
+export default function App() {
   return (
-    <>
-      
-    </>
-  )
+    <PageV1 />
+  );
 }
-
-export default App

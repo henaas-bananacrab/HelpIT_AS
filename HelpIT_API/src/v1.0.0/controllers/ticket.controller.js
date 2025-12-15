@@ -1,4 +1,4 @@
-const {getAllObjects, addObject, updateObjectById, deleteObjectById} = require('../data/ticket.database');
+const {getAllObjects, getObjectById, addObject, updateObjectById, deleteObjectById} = require('../data/ticket.database');
 
 const getAllTickets = async (req, res) => {
     try {
@@ -6,6 +6,15 @@ const getAllTickets = async (req, res) => {
         res.status(200).json({success: true, data: tickets});
     } catch (error) {
         res.status(500).json({success: false, error: 'something went wrong'});
+    }
+};
+
+const getSingleTicket = async (req, res) => {
+    try {
+        const ticket = await getObjectById(req.params.id);
+        res.status(200).json({success: true, data: ticket});
+    } catch (error) {
+        res.status(500).json({succss: false, error: 'something went wrong'});
     }
 };
 
@@ -46,6 +55,7 @@ const deleteTicket = async (req, res) => {
 
 module.exports = {
     getAllTickets,
+    getSingleTicket,
     createTicket,
     updateTicket,
     deleteTicket

@@ -1,11 +1,14 @@
 const express = require('express');
 
-const { getAllTickets, createTicket, updateTicket, deleteTicket } = require('../controllers/ticket.controller');
+const { getAllTickets, getSingleTicket, createTicket, updateTicket, deleteTicket } = require('../controllers/ticket.controller');
 
 const router = express.Router();
 
 //GET | www.localhost:3002/api/v1/tickets
 router.get('/', getAllTickets);
+
+//GET | www.localhost:3002/api/v1/tickets/???(id-en til saken)
+router.get('/:id', getSingleTicket)
 
 //POST | www.localhost:3002/api/v1/tickets
 router.post('/', createTicket);

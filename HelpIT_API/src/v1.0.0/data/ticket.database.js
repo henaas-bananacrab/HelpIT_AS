@@ -10,10 +10,10 @@ const getAllObjects = () => {
 }
 
 // get single ticket by id
-const getObjectById = () => {
+const getObjectById = (id) => {
     id = parseInt(id);
     if (isNaN(id)) return null;
-    return objects.find((object) => object.id === id);
+    return tickets.find((ticket) => ticket.id === id);
 }
 
 // add ticket
@@ -61,6 +61,7 @@ const deleteObjectById = (id) => {
 
 module.exports = {
     getAllObjects,
+    getObjectById,
     addObject,
     updateObjectById,
     deleteObjectById

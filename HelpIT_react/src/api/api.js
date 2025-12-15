@@ -1,7 +1,17 @@
 const API_BASE_URL = 'http://localhost:3002/api/v1/tickets';
 
 export const getTickets = async () => {
-    const res = await fetch(`${API_BASE_URL}`);
+    const res = await fetch(API_BASE_URL);
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+
+    return data;
+}
+
+export const getSingleTicket = async (id) => {
+    const res = await fetch(`${API_BASE_URL}/${id}`);
     if (!res.ok) {
         throw new Error('Network response was not ok');
     }

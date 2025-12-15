@@ -1,7 +1,7 @@
 let tickets = [
     { id: 1, title: 'Network Issue', assignd: 'Tor', date: '12.12.2025', createdBy: 'Råger Råland', phone: 47566070, priority: 'low', status: 'Open', description: 'Cannot connect to VPN',  },
     { id: 2, title: 'Software Bug', assignd: 'Tor', date: '13.12.2025', createdBy: 'Råger Råland', phone: 47566070, priority: 'low', status: 'Open', description: 'Application crashes on launch',  },
-    { id: 2, title: 'Hardware Failure', assignd: 'Gyda', date: '14.12.2025', createdBy: 'Råger Råland', phone: 47566070, priority: 'high', status: 'Open', description: 'Laptop not powering on',  }
+    { id: 3, title: 'Hardware Failure', assignd: 'Gyda', date: '14.12.2025', createdBy: 'Råger Råland', phone: 47566070, priority: 'high', status: 'Open', description: 'Laptop not powering on',  }
 ];
 
 // get all tickets

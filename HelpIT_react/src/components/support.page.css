@@ -1,0 +1,80 @@
+.support-page {
+    display: flex;
+    flex-direction: row;
+}
+
+h1 {
+    margin: 10px;
+}
+
+/* side menu */
+.side-menu {
+    height: 100vh;
+    background-color: #001631;
+}
+
+nav {
+    display: flex;
+    height: 75%;
+    width: 96%;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #002552;
+}
+
+/* main menu */
+.main-menu {
+    display: inline-grid;
+    grid-template-rows: 13vh auto;
+    grid-template-areas:
+        "header header"
+        "mini-ticket ticket";
+}
+
+.menu-header {
+    background-color: #001631;
+    height: 13vh;
+    grid-area: header;
+}
+
+.main-content {
+    height: 100%;
+    grid-area: mini-ticket;
+}
+
+.menu-mini-ticket {
+    background-color: #1a1a1a;
+}
+
+.ticket {
+    grid-area: ticket;
+}
+
+.ticket-card {
+  padding: 1em;
+  list-style-type: none;
+  border: solid 1px lightgrey;
+  display: grid;
+  grid-template-areas: "title name date status";
+  grid-gap: 5px;
+}
+
+.ticket-card:hover {
+    border-color: #646cff;
+}
+
+.ticket-title {
+    grid-area: title;
+}
+
+.ticket-name {
+    grid-area: name;
+}
+
+.ticket-date {
+    grid-area: date;
+}
+
+.ticket-status {
+    grid-area: status;
+}

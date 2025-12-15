@@ -1,20 +1,23 @@
 import  { useEffect, useState } from 'react'
-import { getTickets, createTicket, updateTicket, deleteTicket } from '../api/api'
+import { getTickets, getSingleTicket, createTicket, updateTicket, deleteTicket } from '../api/api'
+import './support.page.css'
 
 export default function pageV1() {
     const [tickets, setTickets] = useState([]);
+    const [singleTicket, setSingleTicket] = useState([]);
     const [newTitle, setNewTitle] = useState('');
     const [newDescription, setNewDescription] = useState('');
     const [currentStatus, setCurrentStatus] = useState('open');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [createMenu, setCreateMenu] = useState(false);
+    const [openTicket, setOpenTicket] = useState(false);
     const [update, setUpdate] = useState(false);
     const [selectedTicketId, setSelectedTicketId] = useState(null);
 
     async function fetchTickets() {
         try {
-            const resp = await getTickets('v1.0.0');
+            const resp = await getTickets();
             const ticketsData = resp && resp.data ? resp.data : [];
             setTickets(ticketsData);
             console.log('Fetched tickets:', ticketsData);
@@ -27,6 +30,18 @@ export default function pageV1() {
     useEffect(() => {
         fetchTickets();
     }, []);
+
+    async function fetchSingleTicket(id) {
+        try {
+            const resp = await getSingleTicket(id)
+            const ticketData = resp?.data ?? [];
+            setSingleTicket([ticketData]);
+            console.log('Fetched ticket:', ticketData);
+            setOpenTicket(true);
+        } catch (error) {
+            setError(error.message + ' could not fetch ticket');
+        }
+    }
 
     async function handleCreateTicket() {
         if (!newTitle || !newDescription || !currentStatus) return alert('Title and Description are required');
@@ -86,7 +101,7 @@ export default function pageV1() {
     if (error) return <div>Error: {error}</div>;
     
     return (
-        <>
+        <div className="support-page">
             <div className="side-menu">
                 <div className="app-header"><img/><h1>HelpIT AS</h1></div>
                 <nav>
@@ -94,51 +109,60 @@ export default function pageV1() {
                     <button onClick={() => setCreateMenu(true)}>Create Ticket</button>
                 </nav>
             </div>
-            <div className="main-menu">
-                {createMenu ? (
-                    <div>
-                        <div className="menu-header"><h1>{update ? 'Update Ticket' : 'Create Ticket'}</h1></div>
-                        <div className="menu-content">
-                            <div className="ticket-title">
-                                <label>What is the problem?
-                                    <input id="title-input" type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-                                </label>
-                            </div>
-                            <div className="ticket-description">
-                                <label>Describe the issue:
-                                    <textarea id="description-input" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} />
-                                </label>
-                            </div>
-                            <div className="ticket-status">
-                                <label>Status:
-                                    <select id="status-input" value={currentStatus} onChange={(e) => setCurrentStatus(e.target.value)}>
-                                        <option value="open">Open</option>
-                                        <option value="in progress">In Progress</option>
-                                        <option value="closed">Closed</option>
-                                    </select>
-                                </label>
-                                
-                            </div>
-                            <button onClick={update ? () => handleUpdateTicket(selectedTicketId) : handleCreateTicket}>{update ? 'Update Ticket' : 'Open Ticket'}</button>
+            
+            {createMenu ? (
+                <div className="main-menu">
+                    <div className="menu-header"><h1>{update ? 'Update Ticket' : 'Create Ticket'}</h1></div>
+                    <div className="menu-content">
+                        <div className="ticket-title">
+                            <label>What is the problem?
+                                <input id="title-input" type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+                            </label>
                         </div>
+                        <div className="ticket-description">
+                            <label>Describe the issue:
+                                <textarea id="description-input" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} />
+                            </label>
+                        </div>
+                        <div className="ticket-status">
+                            <label>Status:
+                                <select id="status-input" value={currentStatus} onChange={(e) => setCurrentStatus(e.target.value)}>
+                                    <option value="open">Open</option>
+                                    <option value="in progress">In Progress</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </label>
+                                
+                        </div>
+                        <button onClick={update ? () => handleUpdateTicket(selectedTicketId) : handleCreateTicket}>{update ? 'Update Ticket' : 'Open Ticket'}</button>
                     </div>
-                ) : (
-                    <div>
-                        <div className="menu-header"><h1>All Tickets</h1></div>
-                        <div className="menu-content">
+                </div>
+            ) : (
+                <div className="main-menu">
+                    <div className="menu-header"><h1>All Tickets</h1></div>
+                    <div className="menu-content">
+                        <div className="menu-mini-ticket">
                             <ul>
                                 {tickets.map((ticketItem) => (
-                                    <li key={ticketItem.id} className="ticket-card">
-                                        <strong>{ticketItem.title}</strong> Description: {ticketItem.description} (Status: {ticketItem.status})
-                                        <button onClick={() => { setUpdate(true); setCreateMenu(true); setSelectedTicketId(ticketItem.id)}}>Updated</button>
-                                        <button onClick={() => handleDeleteTicket(ticketItem.id)}>Deleted</button>
+                                    <li key={ticketItem.id} className="ticket-card" onClick={() =>  fetchSingleTicket(ticketItem.id)}>
+                                        <strong className="ticket-title">{ticketItem.title}</strong> <p className="ticket-name">{ticketItem.createdBy}</p> <p className="ticket-date">{ticketItem.date}</p> <p className="ticket-status">({ticketItem.status})</p>
+                                        {/*<button onClick={() => { setUpdate(true); setCreateMenu(true); setSelectedTicketId(ticketItem.id)}}>Updated</button>
+                                        <button onClick={() => handleDeleteTicket(ticketItem.id)}>Deleted</button>*/}
                                     </li>
                                 ))}
                             </ul>
                         </div>
+                        {openTicket && (
+                            singleTicket.map((ticketItem) => (
+                            <div key={ticketItem.id} className="ticket">
+                                <div className="ticket-date">{ticketItem.date}</div>
+                                <div className="ticket-content"></div>
+                            </div>
+                        ))
+                        )}
                     </div>
-                )}
-            </div>
-        </>
+                </div>
+            )}
+        </div>
     );
 }

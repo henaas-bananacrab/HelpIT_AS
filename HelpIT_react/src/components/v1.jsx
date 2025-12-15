@@ -1,8 +1,8 @@
 import  { useEffect, useState } from 'react'
-import { getCases, createCase, updateCase, deleteCase } from '../api/api'
+import { getTickets, createTicket, updateTicket, deleteTicket } from '../api/api'
 
 export default function pageV1() {
-    const [cases, setCases] = useState([]);
+    const [tickets, setTickets] = useState([]);
     const [newTitle, setNewTitle] = useState('');
     const [newDescription, setNewDescription] = useState('');
     const [currentStatus, setCurrentStatus] = useState('open');
@@ -10,75 +10,75 @@ export default function pageV1() {
     const [loading, setLoading] = useState(true);
     const [createMenu, setCreateMenu] = useState(false);
     const [update, setUpdate] = useState(false);
-    const [selectedCaseId, setSelectedCaseId] = useState(null);
+    const [selectedTicketId, setSelectedTicketId] = useState(null);
 
-    async function fetchCases() {
+    async function fetchTickets() {
         try {
-            const resp = await getCases('v1.0.0');
-            const casesData = resp && resp.data ? resp.data : [];
-            setCases(casesData);
-            console.log('Fetched cases:', casesData);
+            const resp = await getTickets('v1.0.0');
+            const ticketsData = resp && resp.data ? resp.data : [];
+            setTickets(ticketsData);
+            console.log('Fetched tickets:', ticketsData);
         } catch (error) {
-            setError(error.message + ' could not fetch cases');
+            setError(error.message + ' could not fetch tickets');
         }
         setLoading(false);
     }
     
     useEffect(() => {
-        fetchCases();
+        fetchTickets();
     }, []);
 
-    async function handleCreateCase() {
+    async function handleCreateTicket() {
         if (!newTitle || !newDescription || !currentStatus) return alert('Title and Description are required');
-        const caseData = { 
+        const ticketData = { 
             title: newTitle,
             description: newDescription,
             status: currentStatus
         };
         try {
-            const resp = await createCase(caseData);
-            const createdCase = resp && resp.data ? resp.data : resp;
-            setCases(prev => [...prev, createdCase]);
+            const resp = await createTicket(ticketData);
+            const createdTicket = resp && resp.data ? resp.data : resp;
+            setTickets(prev => [...prev, createdTicket]);
             setNewTitle('');
             setNewDescription('');
             setCurrentStatus('open');
             setCreateMenu(false);
-            console.log('Created case:', createdCase);
+            console.log('Created ticket:', createdTicket);
         } catch (error) {
-            setError(error.message + ' could not create case');
+            setError(error.message + ' could not create ticket');
         }
     }
 
-    async function handleDeleteCase(id) {
+    async function handleDeleteTicket(id) {
         try {
-            await deleteCase(id);
-            setCases(prev => prev.filter(c => c.id !== id));
-            console.log('Deleted case with id:', id);
+            await deleteTicket(id);
+            setTickets(prev => prev.filter(c => c.id !== id));
+            console.log('Deleted ticket with id:', id);
         } catch (error) {
-            setError(error.message + ' could not delete case');
+            setError(error.message + ' could not delete ticket');
         }
     }
 
-    async function handleUpdateCase(id) {
+    async function handleUpdateTicket(id) {
         if (!newTitle || !newDescription || !currentStatus) return alert('Title and Description are required');
-        const caseData = { 
+        const ticketData = { 
             title: newTitle,
             description: newDescription,
             status: currentStatus
         };
         try {
-            const resp = await updateCase(id, caseData);
-            const updatedCase = resp && resp.data ? resp.data : resp;
-            setCases(prev => prev.map(c => c.id === id ? updatedCase : c));
+            const resp = await updateTicket(id, ticketData);
+            const updatedTicket = resp && resp.data ? resp.data : resp;
+            setTickets(prev => prev.map(c => c.id === id ? updatedTicket : c));
             setNewTitle('');
             setNewDescription('');
             setCurrentStatus('open');
             setCreateMenu(false);
             setUpdate(false);
-            setSelectedCaseId(null)
-            console.log('Updated case:', updatedCase);
+            setSelectedTicketId(null)
+            console.log('Updated ticket:', updatedTicket);
         } catch (error) {
-            setError(error.message + ' could not update case');
+            setError(error.message + ' could not update ticket');
         }
     }
 
@@ -90,26 +90,26 @@ export default function pageV1() {
             <div className="side-menu">
                 <div className="app-header"><img/><h1>HelpIT AS</h1></div>
                 <nav>
-                    <button onClick={() => setCreateMenu(false)}>All Cases</button>
-                    <button onClick={() => setCreateMenu(true)}>Create Case</button>
+                    <button onClick={() => setCreateMenu(false)}>All Tickets</button>
+                    <button onClick={() => setCreateMenu(true)}>Create Ticket</button>
                 </nav>
             </div>
             <div className="main-menu">
                 {createMenu ? (
                     <div>
-                        <div className="menu-header"><h1>{update ? 'Update Case' : 'Create Case'}</h1></div>
+                        <div className="menu-header"><h1>{update ? 'Update Ticket' : 'Create Ticket'}</h1></div>
                         <div className="menu-content">
-                            <div className="case-title">
+                            <div className="ticket-title">
                                 <label>What is the problem?
                                     <input id="title-input" type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
                                 </label>
                             </div>
-                            <div className="case-description">
+                            <div className="ticket-description">
                                 <label>Describe the issue:
                                     <textarea id="description-input" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} />
                                 </label>
                             </div>
-                            <div className="case-status">
+                            <div className="ticket-status">
                                 <label>Status:
                                     <select id="status-input" value={currentStatus} onChange={(e) => setCurrentStatus(e.target.value)}>
                                         <option value="open">Open</option>
@@ -119,19 +119,19 @@ export default function pageV1() {
                                 </label>
                                 
                             </div>
-                            <button onClick={update ? () => handleUpdateCase(selectedCaseId) : handleCreateCase}>{update ? 'Update Case' : 'Open Case'}</button>
+                            <button onClick={update ? () => handleUpdateTicket(selectedTicketId) : handleCreateTicket}>{update ? 'Update Ticket' : 'Open Ticket'}</button>
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <div className="menu-header"><h1>All Cases</h1></div>
+                        <div className="menu-header"><h1>All Tickets</h1></div>
                         <div className="menu-content">
                             <ul>
-                                {cases.map((caseItem) => (
-                                    <li key={caseItem.id} className="case-card">
-                                        <strong>{caseItem.title}</strong> Description: {caseItem.description} (Status: {caseItem.status})
-                                        <button onClick={() => { setUpdate(true); setCreateMenu(true); setSelectedCaseId(caseItem.id)}}>Updated</button>
-                                        <button onClick={() => handleDeleteCase(caseItem.id)}>Deleted</button>
+                                {tickets.map((ticketItem) => (
+                                    <li key={ticketItem.id} className="ticket-card">
+                                        <strong>{ticketItem.title}</strong> Description: {ticketItem.description} (Status: {ticketItem.status})
+                                        <button onClick={() => { setUpdate(true); setCreateMenu(true); setSelectedTicketId(ticketItem.id)}}>Updated</button>
+                                        <button onClick={() => handleDeleteTicket(ticketItem.id)}>Deleted</button>
                                     </li>
                                 ))}
                             </ul>

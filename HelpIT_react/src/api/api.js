@@ -1,6 +1,6 @@
-const API_BASE_URL = 'http://localhost:3002/api/v1/cases';
+const API_BASE_URL = 'http://localhost:3002/api/v1/tickets';
 
-export const getCases = async () => {
+export const getTickets = async () => {
     const res = await fetch(`${API_BASE_URL}`);
     if (!res.ok) {
         throw new Error('Network response was not ok');
@@ -10,13 +10,13 @@ export const getCases = async () => {
     return data;
 }
 
-export const createCase = async (caseData) => {
+export const createTicket = async (ticketData) => {
     const res = await fetch(API_BASE_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(caseData),
+        body: JSON.stringify(ticketData),
     });
     if (!res.ok) {
         throw new Error('Network response was not ok');
@@ -26,13 +26,13 @@ export const createCase = async (caseData) => {
     return data;
 }
 
-export const updateCase = async (id, caseData) => {
+export const updateTicket = async (id, ticketData) => {
     const res = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(caseData),
+        body: JSON.stringify(ticketData),
     });
     if (!res.ok) {
         throw new Error('Network response was not ok');
@@ -42,7 +42,7 @@ export const updateCase = async (id, caseData) => {
     return data;
 }
 
-export const deleteCase = async (id) => {
+export const deleteTicket = async (id) => {
     const res = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'DELETE',
     });
